@@ -1,0 +1,1428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>FreelanceHub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+/* ─── TOKENS ─── */
+:root{
+  --bg:        #FAFAF8;
+  --bg2:       #F2F0EC;
+  --bg3:       #E8E5DF;
+  --surface:   #FFFFFF;
+  --border:    #E0DDD7;
+  --border2:   #CCCAC4;
+  --text:      #1C1A17;
+  --text2:     #4A4742;
+  --text3:     #7A7772;
+  --accent:    #E05C2A;
+  --accent-bg: #FEF2EC;
+  --accent-h:  #C44D20;
+  --blue:      #2563B8;
+  --blue-bg:   #EBF2FD;
+  --green:     #197A55;
+  --green-bg:  #E8F5EE;
+  --amber:     #B45309;
+  --amber-bg:  #FEF7EC;
+  --red:       #B91C1C;
+  --red-bg:    #FEF2F2;
+  --sh-xs: 0 1px 3px rgba(0,0,0,.06);
+  --sh-sm: 0 2px 8px rgba(0,0,0,.07), 0 1px 3px rgba(0,0,0,.05);
+  --sh-md: 0 4px 20px rgba(0,0,0,.08), 0 2px 6px rgba(0,0,0,.05);
+  --sh-lg: 0 8px 36px rgba(0,0,0,.10), 0 2px 10px rgba(0,0,0,.06);
+  --r:   12px;
+  --r2:  8px;
+  --r3:  6px;
+  --fh: 'Plus Jakarta Sans', sans-serif;
+  --fs: 'DM Serif Display', serif;
+  --sw: 228px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--fh);font-size:14px;line-height:1.6;min-height:100vh}
+
+/* ─── SIDEBAR ─── */
+.sidebar{position:fixed;inset-block:0;left:0;width:var(--sw);background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:300;transition:transform .28s cubic-bezier(.4,0,.2,1)}
+.logo{padding:18px 16px 14px;display:flex;align-items:center;gap:9px;border-bottom:1px solid var(--border)}
+.logo-mark{width:30px;height:30px;background:var(--accent);border-radius:8px;display:grid;place-items:center;font-size:15px;color:#fff;flex-shrink:0;box-shadow:0 2px 8px rgba(224,92,42,.4)}
+.logo-text{font-size:17px;font-weight:800;color:var(--text);letter-spacing:-.3px}
+.logo-text span{color:var(--accent)}
+.nav-wrap{flex:1;padding:10px 8px;overflow-y:auto}
+.nav-section{font-size:10px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:var(--text3);padding:14px 10px 4px}
+.nav-item{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:var(--r2);cursor:pointer;color:var(--text2);font-size:13px;font-weight:500;border:none;background:none;width:100%;text-align:left;transition:all .15s;margin-bottom:1px;line-height:1}
+.nav-item:hover{background:var(--bg2);color:var(--text)}
+.nav-item.active{background:var(--accent-bg);color:var(--accent);font-weight:700}
+.nav-item .nico{font-size:15px;width:20px;text-align:center;flex-shrink:0}
+.nav-badge{margin-left:auto;background:var(--accent);color:#fff;font-size:9px;font-weight:800;padding:1px 6px;border-radius:20px;line-height:1.6}
+.sidebar-foot{padding:12px;border-top:1px solid var(--border)}
+.user-row{display:flex;align-items:center;gap:9px;cursor:pointer}
+.ava{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#E05C2A,#F5A623);display:grid;place-items:center;font-weight:800;font-size:11px;color:#fff;flex-shrink:0}
+.user-name{font-weight:700;font-size:12.5px;color:var(--text);line-height:1.3}
+.user-role{font-size:11px;color:var(--text3)}
+
+/* ─── TOPBAR ─── */
+.main{margin-left:var(--sw);min-height:100vh}
+.topbar{position:sticky;top:0;z-index:200;background:rgba(250,250,248,.94);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:10px 26px;display:flex;align-items:center;gap:12px}
+.topbar-title{font-size:16px;font-weight:700;color:var(--text);flex:1;letter-spacing:-.2px}
+.search-box{display:flex;align-items:center;gap:7px;background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--r2);padding:7px 11px;width:240px;transition:all .2s}
+.search-box:focus-within{background:#fff;border-color:var(--accent);box-shadow:0 0 0 3px rgba(224,92,42,.1)}
+.search-box input{background:none;border:none;outline:none;color:var(--text);font-family:var(--fh);font-size:13px;width:100%;font-weight:500}
+.search-box input::placeholder{color:var(--text3)}
+
+/* ─── BUTTONS ─── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:5px;padding:8px 16px;border-radius:var(--r2);font-family:var(--fh);font-size:13px;font-weight:700;cursor:pointer;border:none;transition:all .15s;white-space:nowrap;line-height:1}
+.btn-primary{background:var(--accent);color:#fff;box-shadow:0 1px 4px rgba(224,92,42,.25)}
+.btn-primary:hover{background:var(--accent-h);transform:translateY(-1px);box-shadow:0 4px 12px rgba(224,92,42,.35)}
+.btn-secondary{background:var(--surface);color:var(--text);border:1.5px solid var(--border)}
+.btn-secondary:hover{background:var(--bg2);border-color:var(--border2)}
+.btn-blue{background:var(--blue);color:#fff}
+.btn-blue:hover{background:#1e50a0;transform:translateY(-1px)}
+.btn-green{background:var(--green);color:#fff}
+.btn-green:hover{background:#156645}
+.btn-sm{padding:6px 12px;font-size:12px}
+.btn-xs{padding:3px 9px;font-size:11px;border-radius:5px}
+.btn-full{width:100%}
+
+/* ─── PAGE ─── */
+.page{padding:24px 28px;display:none;animation:pageIn .3s ease}
+.page.active{display:block}
+@keyframes pageIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* ─── CARDS ─── */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:20px;box-shadow:var(--sh-xs);transition:box-shadow .2s}
+.card:hover{box-shadow:var(--sh-sm)}
+.card-flat{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:18px}
+
+/* ─── GRIDS ─── */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+
+/* ─── SECTION TITLE ─── */
+.sec-title{font-size:15px;font-weight:800;color:var(--text);margin-bottom:14px;display:flex;align-items:center;gap:8px;letter-spacing:-.2px}
+.sec-meta{font-size:11px;font-weight:500;color:var(--text3);margin-left:auto}
+.page-title{font-family:var(--fs);font-size:28px;color:var(--text);margin-bottom:4px;line-height:1.2}
+.page-sub{font-size:13px;color:var(--text3);margin-bottom:22px}
+
+/* ─── TAGS / BADGES ─── */
+.tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;letter-spacing:.1px;line-height:1.7}
+.t-orange{background:var(--accent-bg);color:var(--accent)}
+.t-blue{background:var(--blue-bg);color:var(--blue)}
+.t-green{background:var(--green-bg);color:var(--green)}
+.t-amber{background:var(--amber-bg);color:var(--amber)}
+.t-red{background:var(--red-bg);color:var(--red)}
+.t-gray{background:var(--bg2);color:var(--text2)}
+.t-purple{background:#F3F0FF;color:#6D28D9}
+
+/* ─── STAT CARDS ─── */
+.stat-card{padding:18px 20px;position:relative;overflow:hidden}
+.stat-bg-icon{position:absolute;right:-4px;top:-4px;font-size:48px;opacity:.07;pointer-events:none}
+.stat-label{font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--text3);margin-bottom:4px}
+.stat-value{font-size:28px;font-weight:800;color:var(--text);margin-bottom:2px;letter-spacing:-.5px;line-height:1.1}
+.stat-delta{font-size:11px;font-weight:600}
+.delta-up{color:var(--green)}.delta-down{color:var(--red)}.delta-flat{color:var(--text3)}
+
+/* ─── PROGRESS BAR ─── */
+.prog-track{background:var(--bg3);border-radius:99px;height:6px;overflow:hidden}
+.prog-bar{height:100%;border-radius:99px;transition:width 1.2s cubic-bezier(.4,0,.2,1)}
+.prog-orange{background:linear-gradient(90deg,#E05C2A,#F5A623)}
+.prog-blue{background:linear-gradient(90deg,#2563B8,#38BDF8)}
+.prog-green{background:linear-gradient(90deg,#197A55,#34D399)}
+.prog-amber{background:linear-gradient(90deg,#B45309,#FCD34D)}
+
+/* ─── DIVIDER ─── */
+.divider{height:1px;background:var(--border);margin:16px 0}
+
+/* ─── FORM ─── */
+.form-group{margin-bottom:14px}
+.form-label{display:block;font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--text3);margin-bottom:5px}
+.form-input{width:100%;background:#fff;border:1.5px solid var(--border);border-radius:var(--r2);padding:9px 12px;color:var(--text);font-family:var(--fh);font-size:13.5px;font-weight:500;outline:none;transition:all .2s}
+.form-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(224,92,42,.1)}
+.form-input::placeholder{color:var(--text3)}
+textarea.form-input{resize:vertical;min-height:80px}
+select.form-input option{background:#fff;color:var(--text)}
+
+/* ─── TABS ─── */
+.tab-bar{display:flex;gap:2px;background:var(--bg2);padding:3px;border-radius:10px;margin-bottom:20px;border:1px solid var(--border)}
+.tab-btn{flex:1;padding:7px 10px;border-radius:7px;border:none;background:transparent;color:var(--text3);font-family:var(--fh);font-size:12.5px;font-weight:600;cursor:pointer;transition:all .15s;white-space:nowrap}
+.tab-btn.active{background:#fff;color:var(--text);box-shadow:var(--sh-xs);border:1px solid var(--border)}
+
+/* ─── JOB CARD ─── */
+.job-row{display:flex;gap:12px;padding:14px;background:#fff;border:1.5px solid var(--border);border-radius:var(--r2);margin-bottom:8px;cursor:pointer;transition:all .15s}
+.job-row:hover{border-color:var(--accent);box-shadow:var(--sh-sm);transform:translateX(2px)}
+.job-row.selected{border-color:var(--accent);background:var(--accent-bg)}
+.job-icon{width:40px;height:40px;border-radius:9px;background:var(--bg2);display:grid;place-items:center;font-size:18px;flex-shrink:0}
+.job-title{font-weight:700;font-size:13.5px;color:var(--text);margin-bottom:2px}
+.job-meta{font-size:11.5px;color:var(--text3);margin-bottom:6px}
+.match-pill{display:inline-flex;align-items:center;gap:3px;font-size:10.5px;font-weight:800;color:var(--green);background:var(--green-bg);padding:2px 7px;border-radius:99px;margin-left:auto}
+
+/* ─── TABLE ─── */
+.data-table{width:100%;border-collapse:collapse}
+.data-table th{font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--text3);padding:8px 12px;text-align:left;border-bottom:1.5px solid var(--border);background:var(--bg2)}
+.data-table td{padding:10px 12px;border-bottom:1px solid var(--border);font-size:13px;color:var(--text2)}
+.data-table tr:last-child td{border-bottom:none}
+.data-table tbody tr:hover td{background:var(--bg2)}
+
+/* ─── MODAL ─── */
+.modal-overlay{position:fixed;inset:0;background:rgba(28,26,23,.5);backdrop-filter:blur(6px);z-index:600;display:none;align-items:center;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal-box{background:#fff;border:1px solid var(--border);border-radius:16px;width:92%;max-width:500px;padding:26px;animation:pageIn .25s ease;max-height:90vh;overflow-y:auto;box-shadow:var(--sh-lg)}
+.modal-header{font-size:17px;font-weight:800;color:var(--text);margin-bottom:18px;display:flex;align-items:center;justify-content:space-between;letter-spacing:-.2px}
+.modal-close{background:none;border:none;color:var(--text3);font-size:18px;cursor:pointer;padding:2px 6px;border-radius:5px;line-height:1}
+.modal-close:hover{background:var(--bg2);color:var(--text)}
+
+/* ─── TOAST ─── */
+.toast-el{position:fixed;bottom:20px;right:20px;background:#fff;border:1.5px solid var(--green);border-radius:10px;padding:11px 16px;z-index:9999;display:none;align-items:center;gap:9px;font-size:13px;font-weight:600;color:var(--text);max-width:300px;box-shadow:var(--sh-lg);animation:toastIn .25s ease}
+@keyframes toastIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* ─── MINI CHART ─── */
+.mini-chart{display:flex;align-items:flex-end;gap:4px;height:64px}
+.chart-bar{flex:1;border-radius:4px 4px 0 0;background:linear-gradient(0deg,rgba(224,92,42,.25),var(--accent));min-width:8px;cursor:pointer;transition:opacity .15s}
+.chart-bar:hover{opacity:.8}
+
+/* ─── STARS ─── */
+.stars-disp{color:#F59E0B;letter-spacing:1px}
+.star-input-btn{font-size:24px;cursor:pointer;color:#D1CFC9;transition:color .1s, transform .15s}
+.star-input-btn:hover,.star-input-btn.lit{color:#F59E0B}
+.star-input-btn:hover{transform:scale(1.2)}
+
+/* ─── RANGE SLIDER ─── */
+.range-wrap{position:relative;padding-bottom:4px}
+input[type=range]{width:100%;-webkit-appearance:none;appearance:none;height:5px;border-radius:99px;background:var(--bg3);outline:none;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--accent);cursor:pointer;border:3px solid #fff;box-shadow:0 1px 6px rgba(224,92,42,.4)}
+.range-labels{display:flex;justify-content:space-between;font-size:10px;color:var(--text3);margin-top:3px}
+
+/* ─── HERO / HOME ─── */
+.home-hero{background:linear-gradient(145deg,#fff 0%,var(--accent-bg) 100%);border:1px solid var(--border);border-radius:16px;padding:56px 40px 52px;text-align:center;margin-bottom:24px;position:relative;overflow:hidden}
+.home-hero::before{content:'';position:absolute;top:-80px;right:-80px;width:260px;height:260px;background:radial-gradient(circle,rgba(224,92,42,.12) 0%,transparent 70%)}
+.home-hero::after{content:'';position:absolute;bottom:-60px;left:-60px;width:200px;height:200px;background:radial-gradient(circle,rgba(37,99,184,.08) 0%,transparent 70%)}
+.hero-eyebrow{display:inline-block;font-size:11px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--accent);background:var(--accent-bg);padding:4px 12px;border-radius:99px;margin-bottom:18px;border:1px solid rgba(224,92,42,.2)}
+.hero-heading{font-family:var(--fs);font-size:48px;color:var(--text);line-height:1.08;margin-bottom:14px}
+.hero-heading em{color:var(--accent)}
+.hero-body{font-size:16px;color:var(--text2);max-width:500px;margin:0 auto 28px;line-height:1.7}
+.hero-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+
+/* ─── FEATURE GRID ─── */
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px}
+.feat-card{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:22px 18px;transition:all .2s}
+.feat-card:hover{border-color:var(--accent);transform:translateY(-3px);box-shadow:var(--sh-md)}
+.feat-icon{font-size:28px;margin-bottom:10px}
+.feat-title{font-size:14px;font-weight:800;color:var(--text);margin-bottom:5px;letter-spacing:-.1px}
+.feat-desc{font-size:12px;color:var(--text3);line-height:1.65}
+
+/* ─── COMMUNITY POST ─── */
+.post-card{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:10px}
+.post-ava{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:11px;color:#fff;flex-shrink:0}
+
+/* ─── PRICING RESULT ─── */
+.price-big{font-family:var(--fs);font-size:46px;color:var(--accent);line-height:1;margin:6px 0 4px}
+
+/* ─── FREELANCER ROW ─── */
+.fl-row{display:flex;gap:12px;padding:14px;background:#fff;border:1px solid var(--border);border-radius:var(--r2);margin-bottom:8px;transition:all .15s}
+.fl-row:hover{border-color:var(--blue);box-shadow:var(--sh-sm)}
+
+/* ─── UTIL ─── */
+.flex{display:flex}.items-center{align-items:center}.justify-between{justify-content:space-between}
+.gap-6{gap:6px}.gap-8{gap:8px}.gap-10{gap:10px}.gap-12{gap:12px}
+.mt-8{margin-top:8px}.mt-12{margin-top:12px}.mt-16{margin-top:16px}.mt-20{margin-top:20px}
+.mb-8{margin-bottom:8px}.mb-12{margin-bottom:12px}.mb-16{margin-bottom:16px}.mb-20{margin-bottom:20px}
+.text-sm{font-size:12px}.text-xs{font-size:11px}.text-muted{color:var(--text3)}.text-bold{font-weight:700}.w-full{width:100%}
+.spinner{width:18px;height:18px;border:2.5px solid rgba(224,92,42,.2);border-top-color:var(--accent);border-radius:50%;animation:spin .65s linear infinite;display:inline-block;vertical-align:middle}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:940px){
+  .sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}
+  .main{margin-left:0}.g3,.g4,.feat-grid{grid-template-columns:1fr 1fr}
+  .hero-heading{font-size:34px}
+  #hamburger{display:flex!important}
+}
+@media(max-width:600px){
+  .g2,.g3,.g4,.feat-grid{grid-template-columns:1fr}
+  .page{padding:16px 14px}
+  .home-hero{padding:36px 18px}
+  .hero-heading{font-size:28px}
+}
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:99px}
+::-webkit-scrollbar-track{background:transparent}
+</style>
+</head>
+<body>
+
+<!-- ═══════════ SIDEBAR ═══════════ -->
+<aside class="sidebar" id="sidebar">
+  <div class="logo">
+    <div class="logo-mark">⚡</div>
+    <div class="logo-text">Freelance<span>Hub</span></div>
+  </div>
+  <div class="nav-wrap">
+    <div class="nav-section">Main</div>
+    <button class="nav-item active" id="nav-home" onclick="goTo('home')"><span class="nico">🏠</span>Home</button>
+    <button class="nav-item" id="nav-dash" onclick="goTo('dash')"><span class="nico">📊</span>Dashboard</button>
+
+    <div class="nav-section">Find Work</div>
+    <button class="nav-item" id="nav-jobs" onclick="goTo('jobs')"><span class="nico">🎯</span>Smart Job Match<span class="nav-badge">9</span></button>
+    <button class="nav-item" id="nav-proposals" onclick="goTo('proposals')"><span class="nico">✍️</span>AI Proposals</button>
+    <button class="nav-item" id="nav-pricing" onclick="goTo('pricing')"><span class="nico">💰</span>Pricing Guide</button>
+
+    <div class="nav-section">Manage</div>
+    <button class="nav-item" id="nav-projects" onclick="goTo('projects')"><span class="nico">📁</span>Projects</button>
+    <button class="nav-item" id="nav-invoices" onclick="goTo('invoices')"><span class="nico">🧾</span>Invoices & Admin</button>
+
+    <div class="nav-section">Connect</div>
+    <button class="nav-item" id="nav-clients" onclick="goTo('clients')"><span class="nico">🤝</span>Client Matching</button>
+    <button class="nav-item" id="nav-reviews" onclick="goTo('reviews')"><span class="nico">⭐</span>Reviews</button>
+    <button class="nav-item" id="nav-skills" onclick="goTo('skills')"><span class="nico">📚</span>Skill Hub</button>
+    <button class="nav-item" id="nav-community" onclick="goTo('community')"><span class="nico">💬</span>Community</button>
+
+    <div class="nav-section">Account</div>
+    <button class="nav-item" id="nav-profile" onclick="goTo('profile')"><span class="nico">👤</span>Profile</button>
+  </div>
+  <div class="sidebar-foot">
+    <div class="user-row" onclick="goTo('profile')">
+      <div class="ava">RS</div>
+      <div>
+        <div class="user-name">Riya Sharma</div>
+        <div class="user-role">Graphic Designer · Mumbai</div>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- ═══════════ MAIN ═══════════ -->
+<div class="main">
+  <div class="topbar">
+    <button id="hamburger" onclick="document.getElementById('sidebar').classList.toggle('open')" style="background:none;border:none;color:var(--text);font-size:22px;cursor:pointer;display:none;align-items:center;padding:2px 6px">☰</button>
+    <div class="topbar-title" id="topbar-title">Home</div>
+    <div class="search-box">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text3)" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" placeholder="Search jobs, clients, skills…">
+    </div>
+    <button class="btn btn-secondary btn-sm" onclick="toast('🔔 3 new job matches for you!','green')">🔔 <strong>3</strong></button>
+    <div class="ava" style="cursor:pointer;width:30px;height:30px;font-size:10px" onclick="goTo('profile')">RS</div>
+  </div>
+
+  <!-- ══ HOME ══ -->
+  <div class="page active" id="page-home">
+    <div class="home-hero">
+      <div class="hero-eyebrow">✦ All-in-One Freelancer Platform</div>
+      <h1 class="hero-heading">Stop Hustling.<br><em>Start Thriving.</em></h1>
+      <p class="hero-body">Smart job matching, AI proposals, fair pricing guidance, automated invoicing — and a thriving freelancer community. Everything you need, nothing you don't.</p>
+      <div class="hero-btns">
+        <button class="btn btn-primary" style="font-size:14px;padding:11px 24px" onclick="goTo('dash')">🚀 Open Dashboard</button>
+        <button class="btn btn-secondary" style="font-size:14px;padding:11px 24px" onclick="goTo('jobs')">🎯 Browse Matched Jobs</button>
+      </div>
+    </div>
+
+    <div class="feat-grid">
+      <div class="feat-card"><div class="feat-icon">🎯</div><div class="feat-title">Smart Job Matching</div><div class="feat-desc">AI recommends projects based on your skills, portfolio & experience — no more scrolling irrelevant listings.</div></div>
+      <div class="feat-card"><div class="feat-icon">✍️</div><div class="feat-title">AI Proposal Generator</div><div class="feat-desc">One-click personalised proposals. AI-powered suggestions that help you pitch and win clients faster.</div></div>
+      <div class="feat-card"><div class="feat-icon">💰</div><div class="feat-title">Pricing Guidance</div><div class="feat-desc">Stop under-charging. Get AI-suggested rates based on skill level, market trends and project complexity.</div></div>
+      <div class="feat-card"><div class="feat-icon">📁</div><div class="feat-title">Project Dashboard</div><div class="feat-desc">Track deadlines, milestones and payment status for every client — in one clean, organised view.</div></div>
+      <div class="feat-card"><div class="feat-icon">🧾</div><div class="feat-title">Automated Admin</div><div class="feat-desc">Auto-generate invoices, send follow-ups and eliminate repetitive tasks so you focus on your craft.</div></div>
+      <div class="feat-card"><div class="feat-icon">🤝</div><div class="feat-title">Client–Freelancer Match</div><div class="feat-desc">Clients find and invite you directly by skill, rating and experience — not just job postings.</div></div>
+      <div class="feat-card"><div class="feat-icon">⭐</div><div class="feat-title">Two-Way Reviews</div><div class="feat-desc">Freelancers and clients rate each other after every project. Transparent trust-building on both sides.</div></div>
+      <div class="feat-card"><div class="feat-icon">📚</div><div class="feat-title">Skill Development</div><div class="feat-desc">Tutorials and mini-courses built right in. Keep growing while you work — no platform-switching needed.</div></div>
+      <div class="feat-card"><div class="feat-icon">💬</div><div class="feat-title">Community & Networking</div><div class="feat-desc">Connect with thousands of freelancers, share tips, and collaborate on projects bigger than one person.</div></div>
+    </div>
+
+    <div class="card" style="text-align:center;padding:44px 32px;background:linear-gradient(145deg,#fff,var(--accent-bg));border-color:rgba(224,92,42,.2)">
+      <div style="font-family:var(--fs);font-size:32px;color:var(--text);margin-bottom:10px">Ready to focus on your <span style="color:var(--accent)">craft?</span></div>
+      <div style="font-size:14px;color:var(--text3);margin-bottom:22px">Join 50,000+ freelancers who've taken back control of their time and income.</div>
+      <button class="btn btn-primary" style="font-size:14px;padding:11px 26px" onclick="goTo('dash')">Get Started — Free Forever 🎉</button>
+    </div>
+  </div>
+
+  <!-- ══ DASHBOARD ══ -->
+  <div class="page" id="page-dash">
+    <div class="page-title">Good morning, Riya 👋</div>
+    <div class="page-sub">Here's your freelance snapshot for today.</div>
+
+    <div class="g4 mb-16">
+      <div class="card stat-card">
+        <div class="stat-bg-icon">💰</div>
+        <div class="stat-label">Monthly Revenue</div>
+        <div class="stat-value" style="color:var(--accent)">₹84,500</div>
+        <div class="stat-delta delta-up">↑ 23% vs last month</div>
+      </div>
+      <div class="card stat-card">
+        <div class="stat-bg-icon">📁</div>
+        <div class="stat-label">Active Projects</div>
+        <div class="stat-value" style="color:var(--blue)">7</div>
+        <div class="stat-delta delta-up">↑ 2 new this week</div>
+      </div>
+      <div class="card stat-card">
+        <div class="stat-bg-icon">📬</div>
+        <div class="stat-label">Proposal Rate</div>
+        <div class="stat-value" style="color:var(--green)">68%</div>
+        <div class="stat-delta delta-up">↑ 12% this month</div>
+      </div>
+      <div class="card stat-card">
+        <div class="stat-bg-icon">⭐</div>
+        <div class="stat-label">Avg Rating</div>
+        <div class="stat-value" style="color:var(--amber)">4.9</div>
+        <div class="stat-delta delta-up">↑ 0.2 this quarter</div>
+      </div>
+    </div>
+
+    <div class="g2 mb-16">
+      <div class="card">
+        <div class="sec-title">Weekly Revenue <span class="sec-meta">₹ INR · Last 8 weeks</span></div>
+        <div class="mini-chart" id="rev-chart"></div>
+        <div style="display:flex;justify-content:space-between;margin-top:5px" class="text-xs text-muted">
+          <span>Jan 27</span><span>Feb 3</span><span>Feb 10</span><span>Feb 17</span><span>Feb 24</span><span>Mar 3</span><span>Mar 10</span><span>Mar 17</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="sec-title">Project Progress</div>
+        <div id="proj-progress-list"></div>
+      </div>
+    </div>
+
+    <div class="g2">
+      <div class="card">
+        <div class="sec-title">Recent Activity</div>
+        <div id="activity-feed"></div>
+      </div>
+      <div class="card">
+        <div class="sec-title">Quick Actions</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <button class="btn btn-secondary w-full" style="flex-direction:column;gap:6px;padding:16px;height:72px;border-radius:10px" onclick="goTo('proposals')"><span style="font-size:20px">✍️</span><span style="font-size:12px">New Proposal</span></button>
+          <button class="btn btn-secondary w-full" style="flex-direction:column;gap:6px;padding:16px;height:72px;border-radius:10px" onclick="goTo('invoices')"><span style="font-size:20px">🧾</span><span style="font-size:12px">New Invoice</span></button>
+          <button class="btn btn-secondary w-full" style="flex-direction:column;gap:6px;padding:16px;height:72px;border-radius:10px" onclick="goTo('jobs')"><span style="font-size:20px">🎯</span><span style="font-size:12px">Find Jobs</span></button>
+          <button class="btn btn-secondary w-full" style="flex-direction:column;gap:6px;padding:16px;height:72px;border-radius:10px" onclick="goTo('pricing')"><span style="font-size:20px">💰</span><span style="font-size:12px">Pricing Guide</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SMART JOB MATCH ══ -->
+  <div class="page" id="page-jobs">
+    <div class="page-title">Smart Job Match</div>
+    <div class="page-sub">AI has found <strong>9 projects</strong> that match your skills and portfolio.</div>
+
+    <div class="tab-bar">
+      <button class="tab-btn active" onclick="swTab(this)">🎯 Recommended (9)</button>
+      <button class="tab-btn" onclick="swTab(this)">🆕 Latest</button>
+      <button class="tab-btn" onclick="swTab(this)">📬 Applied (3)</button>
+      <button class="tab-btn" onclick="swTab(this)">🔖 Saved</button>
+    </div>
+
+    <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;align-items:center">
+      <select class="form-input" style="width:auto;padding:6px 10px;font-size:12.5px"><option>All Types</option><option>Design</option><option>UI/UX</option><option>Development</option><option>Writing</option></select>
+      <select class="form-input" style="width:auto;padding:6px 10px;font-size:12.5px"><option>Any Budget</option><option>Under ₹10K</option><option>₹10K – ₹50K</option><option>₹50K+</option></select>
+      <select class="form-input" style="width:auto;padding:6px 10px;font-size:12.5px"><option>Any Duration</option><option>&lt; 1 week</option><option>1–4 weeks</option><option>1–3 months</option></select>
+      <button class="btn btn-sm btn-secondary" style="margin-left:auto">Clear</button>
+    </div>
+
+    <div class="g2">
+      <div id="job-list"></div>
+      <div id="job-detail" class="card" style="position:sticky;top:72px;height:fit-content">
+        <div style="text-align:center;padding:40px 16px;color:var(--text3)">
+          <div style="font-size:42px;margin-bottom:12px">🎯</div>
+          <div style="font-size:14px;font-weight:700;color:var(--text2);margin-bottom:4px">Select a job to preview</div>
+          <div class="text-sm">AI matched 9 jobs to your profile</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ AI PROPOSALS ══ -->
+  <div class="page" id="page-proposals">
+    <div class="page-title">AI Proposal Generator</div>
+    <div class="page-sub">Create winning proposals in under 2 minutes — powered by AI.</div>
+
+    <div class="tab-bar">
+      <button class="tab-btn active" onclick="swTab(this)">✍️ Create</button>
+      <button class="tab-btn" onclick="swTab(this)">📋 Sent (12)</button>
+      <button class="tab-btn" onclick="swTab(this)">📂 Templates</button>
+    </div>
+
+    <div class="g2">
+      <div class="card">
+        <div class="sec-title">Proposal Builder <span style="font-size:10px;font-weight:800;color:#7C3AED;background:#F3F0FF;padding:2px 7px;border-radius:4px;margin-left:4px">✨ AI</span></div>
+        <div class="form-group">
+          <label class="form-label">Project Type</label>
+          <select class="form-input" id="p-type"><option>Logo & Brand Identity</option><option>UI/UX Design</option><option>Web Development</option><option>Content Writing</option><option>Social Media Marketing</option><option>Photo Editing</option></select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Client / Company</label>
+          <input type="text" class="form-input" id="p-client" placeholder="e.g. Nova Tech"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Budget Range</label>
+          <select class="form-input" id="p-budget"><option>₹5,000 – ₹15,000</option><option>₹15,000 – ₹40,000</option><option>₹40,000 – ₹1,00,000</option><option>₹1,00,000+</option></select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Timeline</label>
+          <select class="form-input" id="p-timeline"><option>Less than 1 week</option><option>1–2 weeks</option><option>2–4 weeks</option><option>1–3 months</option></select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Tone</label>
+          <div style="display:flex;gap:6px;flex-wrap:wrap" id="tone-btns">
+            <button class="tag t-orange" style="cursor:pointer;font-size:12px;padding:5px 11px" onclick="selTone(this)">Professional</button>
+            <button class="tag t-gray" style="cursor:pointer;font-size:12px;padding:5px 11px" onclick="selTone(this)">Friendly</button>
+            <button class="tag t-gray" style="cursor:pointer;font-size:12px;padding:5px 11px" onclick="selTone(this)">Direct</button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Key Highlights (optional)</label>
+          <textarea class="form-input" id="p-notes" placeholder="Specific skills or achievements to mention…"></textarea>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-primary btn-full" onclick="generateProposal()">✨ Generate Proposal</button>
+          <button class="btn btn-secondary btn-sm" onclick="goTo('pricing')" title="Check pricing first">💰</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="sec-title" style="margin-bottom:10px">Generated Proposal <span id="p-status"></span></div>
+        <div id="proposal-output" style="min-height:220px;font-size:13.5px;line-height:1.9;color:var(--text2)">
+          <div style="text-align:center;padding:40px 0;color:var(--text3)">
+            <div style="font-size:40px;margin-bottom:10px">✍️</div>
+            <div style="font-size:13px">Fill in the form and click Generate</div>
+          </div>
+        </div>
+        <div id="p-action-row" style="display:none;margin-top:12px">
+          <div class="divider"></div>
+          <div style="display:flex;gap:7px">
+            <button class="btn btn-primary btn-sm" onclick="copyProposal()">📋 Copy</button>
+            <button class="btn btn-secondary btn-sm" onclick="generateProposal()">🔄 Regenerate</button>
+            <button class="btn btn-green btn-sm" onclick="toast('📤 Proposal sent to client!','green')">📤 Send</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ PRICING GUIDE ══ -->
+  <div class="page" id="page-pricing">
+    <div class="page-title">Pricing Guidance</div>
+    <div class="page-sub">Get fair, market-informed rates based on your skill level and project details.</div>
+
+    <div class="g2">
+      <div>
+        <div class="card mb-16">
+          <div class="sec-title">Rate Calculator</div>
+          <div class="form-group">
+            <label class="form-label">Your Skill Level</label>
+            <select class="form-input" id="skill-level" onchange="calcPrice()">
+              <option value="beg">Beginner (0–1 year)</option>
+              <option value="mid" selected>Mid-level (1–3 years)</option>
+              <option value="sen">Senior (3–6 years)</option>
+              <option value="exp">Expert (6+ years)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Project Type</label>
+            <select class="form-input" id="proj-type" onchange="calcPrice()">
+              <option value="logo">Logo Design</option>
+              <option value="brand">Full Brand Identity</option>
+              <option value="ui">UI/UX Design</option>
+              <option value="web">Web Development</option>
+              <option value="copy">Content Writing</option>
+              <option value="social">Social Media Pack</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Complexity — <span id="complexity-label" style="color:var(--accent);font-weight:800">Moderate</span></label>
+            <div class="range-wrap">
+              <input type="range" id="complexity" min="1" max="5" value="3" oninput="calcPrice()">
+              <div class="range-labels"><span>Simple</span><span>Complex</span></div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Estimated Hours — <span id="hours-label" style="color:var(--blue);font-weight:800">20 hrs</span></label>
+            <div class="range-wrap">
+              <input type="range" id="hours" min="2" max="80" value="20" oninput="calcPrice()">
+              <div class="range-labels"><span>2 hrs</span><span>80 hrs</span></div>
+            </div>
+          </div>
+          <button class="btn btn-primary w-full" onclick="calcPrice()">📊 Update Calculation</button>
+        </div>
+      </div>
+
+      <div>
+        <div class="card mb-16" style="background:linear-gradient(145deg,#fff,var(--accent-bg));border-color:rgba(224,92,42,.2)">
+          <div class="sec-title">Recommended Rate</div>
+          <div style="text-align:center;padding:4px 0 16px">
+            <div class="text-sm text-muted">Suggested project fee</div>
+            <div class="price-big" id="price-main">₹24,000</div>
+            <div style="font-size:12px;color:var(--text3)">Hourly equiv: <strong id="price-hourly" style="color:var(--text2)">₹1,200/hr</strong></div>
+          </div>
+          <div class="divider"></div>
+          <div class="g2" style="gap:10px;margin-top:14px">
+            <div style="background:var(--green-bg);border-radius:9px;padding:12px;text-align:center;border:1px solid rgba(25,122,85,.15)">
+              <div style="font-size:10px;font-weight:800;color:var(--green);text-transform:uppercase;letter-spacing:.8px;margin-bottom:3px">Low End</div>
+              <div style="font-size:20px;font-weight:800;color:var(--green)" id="price-low">₹18,000</div>
+            </div>
+            <div style="background:var(--accent-bg);border-radius:9px;padding:12px;text-align:center;border:1px solid rgba(224,92,42,.15)">
+              <div style="font-size:10px;font-weight:800;color:var(--accent);text-transform:uppercase;letter-spacing:.8px;margin-bottom:3px">High End</div>
+              <div style="font-size:20px;font-weight:800;color:var(--accent)" id="price-high">₹32,000</div>
+            </div>
+          </div>
+          <div class="divider"></div>
+          <div id="pricing-tip"></div>
+        </div>
+        <div class="card">
+          <div class="sec-title">Market Benchmarks</div>
+          <div id="benchmark-table"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ PROJECTS ══ -->
+  <div class="page" id="page-projects">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+      <div><div class="page-title" style="margin:0">Project Dashboard</div><div class="page-sub" style="margin:4px 0 0">Track all ongoing work in one place.</div></div>
+      <button class="btn btn-primary" onclick="document.getElementById('proj-modal').classList.add('open')">+ New Project</button>
+    </div>
+    <div class="g4 mb-16">
+      <div class="card stat-card"><div class="stat-bg-icon">🟢</div><div class="stat-label">Active</div><div class="stat-value" style="color:var(--blue)">7</div></div>
+      <div class="card stat-card"><div class="stat-bg-icon">⚠️</div><div class="stat-label">Overdue</div><div class="stat-value" style="color:var(--red)">1</div></div>
+      <div class="card stat-card"><div class="stat-bg-icon">✅</div><div class="stat-label">Completed</div><div class="stat-value" style="color:var(--green)">23</div></div>
+      <div class="card stat-card"><div class="stat-bg-icon">💸</div><div class="stat-label">Pending Pay</div><div class="stat-value" style="color:var(--amber)">₹38K</div></div>
+    </div>
+    <div id="project-cards"></div>
+  </div>
+
+  <!-- ══ INVOICES & ADMIN ══ -->
+  <div class="page" id="page-invoices">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+      <div><div class="page-title" style="margin:0">Invoices & Admin</div><div class="page-sub" style="margin:4px 0 0">Automate the boring stuff.</div></div>
+      <button class="btn btn-primary" onclick="openInvoiceModal()">+ New Invoice</button>
+    </div>
+    <div class="g3 mb-16">
+      <div class="card stat-card"><div class="stat-bg-icon">✅</div><div class="stat-label">Paid</div><div class="stat-value" style="color:var(--green)">₹1,24,000</div><div class="stat-delta delta-up">8 invoices</div></div>
+      <div class="card stat-card"><div class="stat-bg-icon">⏳</div><div class="stat-label">Pending</div><div class="stat-value" style="color:var(--amber)">₹38,500</div><div class="stat-delta delta-flat">3 invoices</div></div>
+      <div class="card stat-card"><div class="stat-bg-icon">⚠️</div><div class="stat-label">Overdue</div><div class="stat-value" style="color:var(--red)">₹12,000</div><div class="stat-delta delta-down">1 invoice</div></div>
+    </div>
+    <div class="g2 mb-16">
+      <div class="card">
+        <div class="sec-title">🤖 Auto Admin Tools</div>
+        <div style="display:flex;flex-direction:column;gap:8px" id="admin-tools">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+      <div class="card">
+        <div class="sec-title">All Invoices</div>
+        <table class="data-table"><thead><tr><th>#</th><th>Client</th><th>Amount</th><th>Status</th><th></th></tr></thead><tbody id="invoice-tbody"></tbody></table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ CLIENT MATCHING ══ -->
+  <div class="page" id="page-clients">
+    <div class="page-title">Client–Freelancer Matching</div>
+    <div class="page-sub">Clients discover freelancers by skill, rating and experience.</div>
+    <div class="tab-bar">
+      <button class="tab-btn active" onclick="swTab(this)">🔍 Find Freelancers (Client View)</button>
+      <button class="tab-btn" onclick="swTab(this)">📨 Invites Received (2)</button>
+    </div>
+    <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;align-items:center">
+      <select class="form-input" style="width:auto;padding:6px 10px;font-size:12.5px"><option>All Skills</option><option>Design</option><option>Development</option><option>Writing</option></select>
+      <select class="form-input" style="width:auto;padding:6px 10px;font-size:12.5px"><option>Any Rating</option><option>4.5+</option><option>4.8+</option><option>5.0 only</option></select>
+      <select class="form-input" style="width:auto;padding:6px 10px;font-size:12.5px"><option>Any Experience</option><option>0–1 yr</option><option>1–3 yrs</option><option>3–6 yrs</option><option>6+ yrs</option></select>
+      <select class="form-input" style="width:auto;padding:6px 10px;font-size:12.5px"><option>Availability</option><option>Available Now</option><option>Within 1 Week</option></select>
+      <button class="btn btn-primary btn-sm" style="margin-left:auto">Search</button>
+    </div>
+    <div id="freelancer-list"></div>
+  </div>
+
+  <!-- ══ REVIEWS ══ -->
+  <div class="page" id="page-reviews">
+    <div class="page-title">Rating & Review System</div>
+    <div class="page-sub">Mutual reviews build trust for both freelancers and clients.</div>
+    <div class="g2">
+      <div>
+        <div class="sec-title">Your Reviews <span class="sec-meta" style="color:var(--green);font-weight:800">★ 4.9 avg · 42 reviews</span></div>
+        <div id="review-list"></div>
+      </div>
+      <div class="card" style="height:fit-content">
+        <div class="sec-title">Leave a Review</div>
+        <div class="form-group">
+          <label class="form-label">Project</label>
+          <select class="form-input"><option>Nova Tech — Brand Identity</option><option>Bloom Agency — Social Pack</option><option>QuickBite — UI Audit</option></select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Your Rating</label>
+          <div style="display:flex;gap:4px;margin-top:2px" id="star-input">
+            <span class="star-input-btn" onclick="setStar(1)">★</span>
+            <span class="star-input-btn" onclick="setStar(2)">★</span>
+            <span class="star-input-btn" onclick="setStar(3)">★</span>
+            <span class="star-input-btn" onclick="setStar(4)">★</span>
+            <span class="star-input-btn" onclick="setStar(5)">★</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Your Experience</label>
+          <textarea class="form-input" placeholder="How was it working with this client?"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Tags</label>
+          <div style="display:flex;gap:5px;flex-wrap:wrap" id="review-tags">
+            <span class="tag t-gray" style="cursor:pointer;padding:4px 10px" onclick="toggleTag(this)">Clear Communication</span>
+            <span class="tag t-gray" style="cursor:pointer;padding:4px 10px" onclick="toggleTag(this)">Paid on Time</span>
+            <span class="tag t-gray" style="cursor:pointer;padding:4px 10px" onclick="toggleTag(this)">Realistic Scope</span>
+            <span class="tag t-gray" style="cursor:pointer;padding:4px 10px" onclick="toggleTag(this)">Would Work Again</span>
+          </div>
+        </div>
+        <button class="btn btn-primary w-full" onclick="toast('⭐ Review submitted — thank you!','green')">Submit Review</button>
+        <div class="divider"></div>
+        <div class="text-xs text-muted" style="text-align:center">Clients also rate you after you submit — it's mutual.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SKILL HUB ══ -->
+  <div class="page" id="page-skills">
+    <div class="page-title">Skill Development Hub</div>
+    <div class="page-sub">Grow while you work. Courses and resources right where you need them.</div>
+    <div class="g3 mb-20">
+      <div class="card">
+        <div style="font-size:26px;margin-bottom:8px">🎨</div>
+        <div style="font-size:14px;font-weight:800;color:var(--text);margin-bottom:3px">Design Fundamentals</div>
+        <div style="font-size:12px;color:var(--text3);margin-bottom:12px">Colour, typography, layout composition</div>
+        <div class="prog-track mb-8"><div class="prog-bar prog-orange" style="width:75%"></div></div>
+        <div class="flex items-center justify-between text-xs text-muted mb-12"><span>75% complete</span><span>6 / 8 modules</span></div>
+        <button class="btn btn-primary btn-sm w-full" onclick="toast('📚 Opening Design Fundamentals…','blue')">Continue →</button>
+      </div>
+      <div class="card">
+        <div style="font-size:26px;margin-bottom:8px">💼</div>
+        <div style="font-size:14px;font-weight:800;color:var(--text);margin-bottom:3px">Client Communication</div>
+        <div style="font-size:12px;color:var(--text3);margin-bottom:12px">Proposals, emails, difficult conversations</div>
+        <div class="prog-track mb-8"><div class="prog-bar prog-blue" style="width:40%"></div></div>
+        <div class="flex items-center justify-between text-xs text-muted mb-12"><span>40% complete</span><span>2 / 5 modules</span></div>
+        <button class="btn btn-secondary btn-sm w-full" onclick="toast('📚 Opening Communication module…','blue')">Continue →</button>
+      </div>
+      <div class="card">
+        <div style="font-size:26px;margin-bottom:8px">💰</div>
+        <div style="font-size:14px;font-weight:800;color:var(--text);margin-bottom:3px">Pricing Mastery</div>
+        <div style="font-size:12px;color:var(--text3);margin-bottom:12px">Value pricing, negotiation, contracts</div>
+        <div class="prog-track mb-8"><div class="prog-bar prog-green" style="width:10%"></div></div>
+        <div class="flex items-center justify-between text-xs text-muted mb-12"><span>10% complete</span><span>0 / 4 modules</span></div>
+        <button class="btn btn-green btn-sm w-full" onclick="toast('📚 Starting Pricing Mastery…','green')">Start Course →</button>
+      </div>
+    </div>
+
+    <div class="sec-title">Your Skill Profile</div>
+    <div class="card mb-20" id="skill-bars"></div>
+
+    <div class="sec-title">Recommended Resources</div>
+    <div class="g2" id="resource-grid"></div>
+  </div>
+
+  <!-- ══ COMMUNITY ══ -->
+  <div class="page" id="page-community">
+    <div class="page-title">Community & Networking</div>
+    <div class="page-sub">Connect, share and collaborate with fellow freelancers.</div>
+    <div class="g2">
+      <div>
+        <div style="display:flex;gap:9px;margin-bottom:16px;align-items:center">
+          <div class="ava" style="width:32px;height:32px;font-size:10px;flex-shrink:0">RS</div>
+          <input type="text" class="form-input" id="post-input" placeholder="Share a tip, question or win…" style="flex:1"/>
+          <button class="btn btn-primary btn-sm" onclick="addPost()">Post</button>
+        </div>
+        <div id="community-feed"></div>
+      </div>
+      <div>
+        <div class="sec-title">Open Collaborations</div>
+        <div id="collab-list"></div>
+        <div class="sec-title mt-20">Trending Topics</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px">
+          <span class="tag t-blue" style="padding:4px 10px;cursor:pointer">#pricingadvice</span>
+          <span class="tag t-orange" style="padding:4px 10px;cursor:pointer">#clientstories</span>
+          <span class="tag t-green" style="padding:4px 10px;cursor:pointer">#designtips</span>
+          <span class="tag t-amber" style="padding:4px 10px;cursor:pointer">#proposalhelp</span>
+          <span class="tag t-gray" style="padding:4px 10px;cursor:pointer">#remotework</span>
+          <span class="tag t-purple" style="padding:4px 10px;cursor:pointer">#uiux</span>
+          <span class="tag t-orange" style="padding:4px 10px;cursor:pointer">#branding</span>
+          <span class="tag t-green" style="padding:4px 10px;cursor:pointer">#networking</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ PROFILE ══ -->
+  <div class="page" id="page-profile">
+    <div class="g2">
+      <div>
+        <div class="card" style="text-align:center;padding:32px 22px;margin-bottom:16px">
+          <div class="ava" style="width:72px;height:72px;font-size:22px;margin:0 auto 14px">RS</div>
+          <div style="font-size:20px;font-weight:800;color:var(--text);margin-bottom:3px;letter-spacing:-.3px">Riya Sharma</div>
+          <div class="text-muted" style="font-size:13px;margin-bottom:8px">Freelance Graphic Designer · Mumbai, India</div>
+          <div class="stars-disp" style="margin-bottom:14px;font-size:15px">★★★★★ <span class="text-muted text-xs">(4.9 · 42 reviews)</span></div>
+          <div style="display:flex;gap:5px;justify-content:center;flex-wrap:wrap;margin-bottom:18px">
+            <span class="tag t-orange">Graphic Design</span>
+            <span class="tag t-blue">Branding</span>
+            <span class="tag t-green">UI Design</span>
+            <span class="tag t-amber">Illustration</span>
+          </div>
+          <button class="btn btn-primary w-full" onclick="toast('✏️ Edit profile opening…','blue')">Edit Profile</button>
+        </div>
+        <div class="card">
+          <div class="sec-title">About</div>
+          <p style="font-size:13.5px;color:var(--text2);line-height:1.85">Passionate graphic designer with 3+ years helping startups and small businesses build memorable visual identities. I believe great design solves real problems — and I back that with a structured, collaborative process.</p>
+        </div>
+      </div>
+      <div>
+        <div class="card mb-16">
+          <div class="sec-title">Profile Strength</div>
+          <div style="margin-bottom:13px">
+            <div class="flex items-center justify-between mb-8"><span style="font-size:13px;color:var(--text2);font-weight:600">Portfolio</span><span class="tag t-green">Complete ✓</span></div>
+            <div class="prog-track"><div class="prog-bar prog-green" style="width:100%"></div></div>
+          </div>
+          <div style="margin-bottom:13px">
+            <div class="flex items-center justify-between mb-8"><span style="font-size:13px;color:var(--text2);font-weight:600">Verified Skills</span><span class="tag t-amber">In Progress</span></div>
+            <div class="prog-track"><div class="prog-bar prog-orange" style="width:60%"></div></div>
+          </div>
+          <div style="margin-bottom:13px">
+            <div class="flex items-center justify-between mb-8"><span style="font-size:13px;color:var(--text2);font-weight:600">Reviews</span><span class="tag t-green">42 reviews</span></div>
+            <div class="prog-track"><div class="prog-bar prog-blue" style="width:84%"></div></div>
+          </div>
+          <div>
+            <div class="flex items-center justify-between mb-8"><span style="font-size:13px;color:var(--text2);font-weight:600">Courses</span><span class="tag t-gray">2 / 5 done</span></div>
+            <div class="prog-track"><div class="prog-bar prog-amber" style="width:40%"></div></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="sec-title">Earnings</div>
+          <div class="g2" style="gap:10px">
+            <div style="background:var(--green-bg);border-radius:9px;padding:14px;text-align:center">
+              <div style="font-size:10px;font-weight:800;color:var(--green);text-transform:uppercase;letter-spacing:.8px">This Month</div>
+              <div style="font-size:22px;font-weight:800;color:var(--green);margin-top:3px">₹84,500</div>
+            </div>
+            <div style="background:var(--accent-bg);border-radius:9px;padding:14px;text-align:center">
+              <div style="font-size:10px;font-weight:800;color:var(--accent);text-transform:uppercase;letter-spacing:.8px">Total 2026</div>
+              <div style="font-size:22px;font-weight:800;color:var(--accent);margin-top:3px">₹2,34,000</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div><!-- /main -->
+
+<!-- ─── MODALS ─── -->
+<div class="modal-overlay" id="invoice-modal">
+  <div class="modal-box">
+    <div class="modal-header">🧾 Create Invoice <button class="modal-close" onclick="closeInvoiceModal()">✕</button></div>
+    <div class="form-group"><label class="form-label">Client Name</label><input type="text" class="form-input" id="inv-client" placeholder="e.g. Nova Tech"/></div>
+    <div class="form-group"><label class="form-label">Project</label><input type="text" class="form-input" id="inv-proj" placeholder="e.g. Brand Identity Design"/></div>
+    <div class="form-group"><label class="form-label">Amount (₹)</label><input type="number" class="form-input" id="inv-amt" placeholder="e.g. 25000"/></div>
+    <div class="form-group"><label class="form-label">Due Date</label><input type="date" class="form-input" id="inv-due"/></div>
+    <div class="form-group"><label class="form-label">Notes (optional)</label><textarea class="form-input" id="inv-notes" placeholder="Payment terms, bank details…"></textarea></div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-primary w-full" onclick="createInvoice()">✅ Create & Save Invoice</button>
+      <button class="btn btn-secondary btn-sm" onclick="closeInvoiceModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="proj-modal">
+  <div class="modal-box">
+    <div class="modal-header">📁 Add New Project <button class="modal-close" onclick="document.getElementById('proj-modal').classList.remove('open')">✕</button></div>
+    <div class="form-group"><label class="form-label">Project Name</label><input type="text" class="form-input" id="np-name" placeholder="e.g. Brand Redesign"/></div>
+    <div class="form-group"><label class="form-label">Client</label><input type="text" class="form-input" id="np-client" placeholder="e.g. Nova Tech"/></div>
+    <div class="form-group"><label class="form-label">Deadline</label><input type="date" class="form-input" id="np-due"/></div>
+    <div class="form-group"><label class="form-label">Budget (₹)</label><input type="number" class="form-input" id="np-budget" placeholder="e.g. 40000"/></div>
+    <button class="btn btn-primary w-full" onclick="createProject()">Add Project</button>
+  </div>
+</div>
+
+<div class="toast-el" id="toast-el"><span id="toast-icon">✅</span><span id="toast-msg"></span></div>
+
+<script>
+/* ═════════════════ DATA ═════════════════ */
+const JOBS = [
+  {id:1,icon:'🌟',title:'Brand Identity Designer',company:'Nova Tech',budget:'₹25K–₹40K',timeline:'2 weeks',match:97,tags:['Branding','Illustrator','Logo'],type:'Design',desc:'Create a complete brand identity — logo, colour palette, typography system and brand guidelines for a B2B SaaS product. You will own the visual direction from scratch.',skills:['Logo Design','Brand Guidelines','Adobe Illustrator','Colour Theory']},
+  {id:2,icon:'🌸',title:'Social Media Graphics Pack',company:'Bloom Agency',budget:'₹8K–₹12K',timeline:'5 days',match:91,tags:['Social Media','Canva','Instagram'],type:'Design',desc:'Design 20 editable social media templates for a brand\'s Instagram and LinkedIn. Vibrant, on-brand, and easy for non-designers to customise.',skills:['Canva','Social Media Design','Typography']},
+  {id:3,icon:'🍕',title:'App UI Redesign',company:'QuickBite',budget:'₹50K–₹80K',timeline:'1 month',match:85,tags:['Figma','Mobile UI','UX'],type:'UI/UX',desc:'Full redesign of our food delivery app. Needs a modern design system, scalable components, accessibility compliance and clickable prototype.',skills:['Figma','Mobile Design','User Research','Prototyping']},
+  {id:4,icon:'🍃',title:'Marketing Collateral',company:'GreenLeaf Organics',budget:'₹15K–₹22K',timeline:'10 days',match:79,tags:['Print','Brochure','InDesign'],type:'Print',desc:'Design brochures, flyers and roll-up banners for a trade show booth. Must align with existing brand guidelines and be print-ready at 300 DPI.',skills:['Print Design','InDesign','Layout Composition']},
+  {id:5,icon:'👗',title:'E-commerce Photo Retouching',company:'StyleNest',budget:'₹6K–₹9K',timeline:'3 days',match:72,tags:['Photoshop','Retouching','E-com'],type:'Photo Editing',desc:'Retouch and enhance 80 product photos. Background removal, colour correction, shadow addition, consistent lighting across all images.',skills:['Photoshop','Colour Correction','Background Removal']},
+];
+
+const INVOICES_DATA = [
+  {id:'INV-001',client:'Nova Tech',proj:'Logo Design',amt:28000,date:'2026-02-15',status:'Paid'},
+  {id:'INV-002',client:'Bloom Agency',proj:'Social Templates',amt:9500,date:'2026-02-28',status:'Paid'},
+  {id:'INV-003',client:'QuickBite',proj:'UI Audit',amt:18000,date:'2026-03-05',status:'Pending'},
+  {id:'INV-004',client:'GreenLeaf',proj:'Brochure Design',amt:14000,date:'2026-03-10',status:'Pending'},
+  {id:'INV-005',client:'OldBrand Co.',proj:'Banner Set',amt:12000,date:'2026-02-10',status:'Overdue'},
+];
+
+const PROJECTS_DATA = [
+  {name:'QuickBite App UI',client:'QuickBite',pct:60,color:'prog-blue',due:'Mar 30',pay:'Pending',miles:['Wireframes ✓','Hi-fi Mockups ✓','Prototype','Dev Handoff']},
+  {name:'GreenLeaf Collateral',client:'GreenLeaf',pct:30,color:'prog-green',due:'Apr 5',pay:'Pending',miles:['Brief ✓','Sketches','Final Design','Print Ready']},
+  {name:'StyleNest Photo Edit',client:'StyleNest',pct:85,color:'prog-orange',due:'Mar 22',pay:'Partial',miles:['BG Removal ✓','Colour Correct ✓','Final Delivery','Archive']},
+  {name:'FreshBrew Branding',client:'FreshBrew',pct:15,color:'prog-amber',due:'Apr 20',pay:'Not Started',miles:['Discovery','Concepts','Revisions','Final']},
+];
+
+const ACTIVITIES = [
+  {i:'✅',msg:'INV-002 marked paid by Bloom Agency',t:'2h ago'},
+  {i:'📬',msg:'Proposal sent to QuickBite for App UI',t:'5h ago'},
+  {i:'🎯',msg:'97% match: Nova Tech Brand Identity',t:'8h ago'},
+  {i:'⭐',msg:'New 5-star review from Nova Tech',t:'1d ago'},
+  {i:'📚',msg:'Completed "Client Communication" module 2',t:'2d ago'},
+  {i:'💡',msg:'Pricing tip: charge ₹32K+ for Brand Identity',t:'3d ago'},
+];
+
+const SKILLS_DATA = [
+  {name:'Graphic Design',pct:92,col:'prog-orange'},
+  {name:'Brand Identity',pct:88,col:'prog-blue'},
+  {name:'Adobe Illustrator',pct:95,col:'prog-green'},
+  {name:'Figma / UI Design',pct:74,col:'prog-amber'},
+  {name:'Print Design',pct:68,col:'prog-orange'},
+  {name:'Client Communication',pct:55,col:'prog-blue'},
+  {name:'Pricing & Negotiation',pct:42,col:'prog-green'},
+];
+
+const REVIEWS_DATA = [
+  {client:'Nova Tech',proj:'Brand Identity',rating:5,text:'Riya delivered far beyond expectations. The logo is stunning and the brand guidelines are incredibly detailed. We\'ll definitely hire again.',date:'Mar 2026',tags:['Creative','Fast Delivery','Professional']},
+  {client:'Bloom Agency',proj:'Social Media Pack',rating:5,text:'Super fast turnaround and top-quality work. The templates are flexible and our client absolutely loved them.',date:'Feb 2026',tags:['Great Communication','On Time']},
+  {client:'QuickBite',proj:'UI Audit',rating:4,text:'Detailed, well-structured UX report with clear actionable suggestions. Great eye for mobile usability. Will hire for the full redesign.',date:'Feb 2026',tags:['Thorough','Helpful']},
+];
+
+const POSTS_DATA = [
+  {name:'Aarav K.',role:'Web Developer',color:'#2563B8',ini:'AK',text:'Just landed my first ₹1L project! 🎉 The AI proposal builder here made such a difference — had a personalised proposal ready in under 2 minutes. Truly recommend!',likes:24,t:'1h ago'},
+  {name:'Priya M.',role:'Content Writer',color:'#7C3AED',ini:'PM',text:'Question for everyone: how do you handle scope creep? A brand project quoted for ₹20K has ballooned to 3× the original work. What would you do? 😅',likes:18,t:'3h ago'},
+  {name:'Rohan S.',role:'Photographer',color:'#197A55',ini:'RS',text:'Tip 💡: Always send a detailed brief form before starting. I use a Google Form — happy to share the template if anyone wants it!',likes:41,t:'6h ago'},
+  {name:'Divya P.',role:'UI Designer',color:'#E05C2A',ini:'DP',text:'Used the Pricing Guide here and realised I was under-charging by 40% for UI projects. This tool is genuinely eye-opening. 🙏',likes:55,t:'12h ago'},
+];
+
+const FREELANCERS_DATA = [
+  {name:'Arjun Mehta',role:'UI/UX Designer',exp:'4 years',rating:4.9,skills:['Figma','Mobile UI','Design Systems'],avail:'Available'},
+  {name:'Sneha Iyer',role:'Content Writer',exp:'3 years',rating:4.8,skills:['SEO Copywriting','Blogs','Email'],avail:'Busy'},
+  {name:'Karan Shah',role:'Full-Stack Dev',exp:'5 years',rating:4.7,skills:['React','Node.js','MongoDB'],avail:'Available'},
+  {name:'Meera Pillai',role:'Brand Designer',exp:'6 years',rating:5.0,skills:['Branding','Illustrator','Print'],avail:'Available'},
+];
+
+const COLLABS_DATA = [
+  {title:'Full-Stack Dev + Designer for SaaS Product',by:'TechBuilders',tags:['UI Design','React'],pay:'Revenue Share (25%)'},
+  {title:'Brand + Copywriter for D2C Brand Launch',by:'FreshFounders',tags:['Branding','Copywriting'],pay:'₹30,000 project'},
+  {title:'Video Editor + Social Media Designer',by:'ContentHive',tags:['Video Editing','Instagram'],pay:'₹8,000/month'},
+];
+
+const BENCHMARKS = [
+  {type:'Logo Design',low:'₹5,000',mid:'₹18,000',high:'₹60,000'},
+  {type:'Brand Identity',low:'₹15,000',mid:'₹45,000',high:'₹1,50,000'},
+  {type:'UI/UX Design',low:'₹20,000',mid:'₹60,000',high:'₹2,00,000'},
+  {type:'Web Development',low:'₹25,000',mid:'₹80,000',high:'₹3,00,000'},
+];
+
+const PRICE_BASE = {
+  logo:  {beg:5000,  mid:15000, sen:35000,  exp:60000},
+  brand: {beg:12000, mid:40000, sen:90000,  exp:150000},
+  ui:    {beg:15000, mid:55000, sen:120000, exp:200000},
+  web:   {beg:20000, mid:70000, sen:150000, exp:300000},
+  copy:  {beg:3000,  mid:8000,  sen:18000,  exp:35000},
+  social:{beg:4000,  mid:12000, sen:25000,  exp:50000},
+};
+
+const PRICING_TIPS = {
+  beg:'As a beginner, build your portfolio with competitive rates. Consider small discounts for testimonials — but never work for free.',
+  mid:'You have solid proof of work — charge confidently. Add a 15–20% complexity fee for vague briefs or multiple decision-makers.',
+  sen:'Senior rates reflect process and reliability, not just output. Premium clients pay for speed, structure and accountability.',
+  exp:'At expert level, your price signals prestige. Anchor high — most serious clients won\'t negotiate down.',
+};
+
+const COMPLEXITY_LABELS = {1:'Very Simple',2:'Simple',3:'Moderate',4:'Complex',5:'Very Complex'};
+
+const PAGE_TITLES = {
+  home:'Home',dash:'Dashboard',jobs:'Smart Job Match',proposals:'AI Proposals',pricing:'Pricing Guide',
+  projects:'Projects',invoices:'Invoices & Admin',clients:'Client Matching',reviews:'Reviews',
+  skills:'Skill Hub',community:'Community',profile:'Profile'
+};
+
+/* ═════════════════ NAV ═════════════════ */
+function goTo(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  const nav = document.getElementById('nav-'+id);
+  if (nav) nav.classList.add('active');
+  document.getElementById('topbar-title').textContent = PAGE_TITLES[id] || id;
+  window.scrollTo(0,0);
+  if (window.innerWidth < 940) document.getElementById('sidebar').classList.remove('open');
+}
+
+function swTab(el) {
+  el.closest('.tab-bar').querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+}
+
+/* ═════════════════ TOAST ═════════════════ */
+let _toastTimer;
+function toast(msg, type='green') {
+  const el = document.getElementById('toast-el');
+  const colors = {green:'var(--green)',blue:'var(--blue)',orange:'var(--accent)',red:'var(--red)'};
+  document.getElementById('toast-msg').textContent = msg;
+  el.style.borderColor = colors[type] || colors.green;
+  el.style.display = 'flex';
+  clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(() => { el.style.display = 'none'; }, 3200);
+}
+
+/* ═════════════════ DASHBOARD ═════════════════ */
+function renderDashboard() {
+  const vals = [45,62,38,70,55,80,72,84];
+  const max = Math.max(...vals);
+  document.getElementById('rev-chart').innerHTML = vals.map(v =>
+    `<div class="chart-bar" style="height:${(v/max*100)}%" title="₹${(v*1000).toLocaleString('en-IN')}"></div>`
+  ).join('');
+
+  document.getElementById('proj-progress-list').innerHTML = PROJECTS_DATA.map(p => `
+    <div style="margin-bottom:14px">
+      <div class="flex items-center justify-between mb-8">
+        <div>
+          <div style="font-size:13px;font-weight:700;color:var(--text)">${p.name}</div>
+          <div class="text-xs text-muted">${p.client} · Due ${p.due}</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:12px;font-weight:800;color:var(--text2)">${p.pct}%</div>
+          <span class="tag ${p.pay==='Pending'?'t-amber':p.pay==='Partial'?'t-blue':p.pay==='Not Started'?'t-gray':'t-green'}" style="font-size:10px">${p.pay}</span>
+        </div>
+      </div>
+      <div class="prog-track"><div class="prog-bar ${p.color}" style="width:${p.pct}%"></div></div>
+    </div>
+  `).join('');
+
+  document.getElementById('activity-feed').innerHTML = ACTIVITIES.map(a => `
+    <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)">
+      <span style="font-size:16px;width:22px;text-align:center;flex-shrink:0">${a.i}</span>
+      <div style="flex:1;font-size:13px;color:var(--text2)">${a.msg}</div>
+      <span class="text-xs text-muted">${a.t}</span>
+    </div>
+  `).join('');
+}
+
+/* ═════════════════ JOBS ═════════════════ */
+function renderJobs() {
+  document.getElementById('job-list').innerHTML = JOBS.map(j => `
+    <div class="job-row" onclick="showJobDetail(${j.id})" id="jrow-${j.id}">
+      <div class="job-icon">${j.icon}</div>
+      <div style="flex:1">
+        <div class="job-title">${j.title}</div>
+        <div class="job-meta">${j.company} · ${j.budget} · ${j.timeline}</div>
+        <div style="display:flex;gap:4px;flex-wrap:wrap;align-items:center">
+          ${j.tags.map(t => `<span class="tag t-blue">${t}</span>`).join('')}
+          <div class="match-pill">✓ ${j.match}% match</div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function showJobDetail(id) {
+  document.querySelectorAll('.job-row').forEach(r => r.classList.remove('selected'));
+  const row = document.getElementById('jrow-'+id);
+  if (row) row.classList.add('selected');
+  const j = JOBS.find(x => x.id === id);
+  document.getElementById('job-detail').innerHTML = `
+    <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:16px">
+      <div style="font-size:36px">${j.icon}</div>
+      <div style="flex:1">
+        <div style="font-size:17px;font-weight:800;color:var(--text);letter-spacing:-.2px">${j.title}</div>
+        <div class="text-sm text-muted">${j.company}</div>
+      </div>
+      <div style="background:var(--green-bg);padding:8px 12px;border-radius:8px;text-align:center;border:1px solid rgba(25,122,85,.2)">
+        <div style="font-size:20px;font-weight:800;color:var(--green)">${j.match}%</div>
+        <div style="font-size:9px;font-weight:800;color:var(--green);text-transform:uppercase;letter-spacing:.6px">AI Match</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:12px">
+      <span class="tag t-orange">💰 ${j.budget}</span>
+      <span class="tag t-blue">⏱ ${j.timeline}</span>
+      <span class="tag t-gray">📂 ${j.type}</span>
+    </div>
+    <div style="font-size:13.5px;color:var(--text2);line-height:1.85;margin-bottom:16px">${j.desc}</div>
+    <div style="margin-bottom:16px">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--text3);margin-bottom:7px">Required Skills</div>
+      <div style="display:flex;gap:5px;flex-wrap:wrap">${j.skills.map(s => `<span class="tag t-green">${s}</span>`).join('')}</div>
+    </div>
+    <div class="divider"></div>
+    <div style="display:flex;gap:7px;margin-top:14px">
+      <button class="btn btn-primary" style="flex:1" onclick="applyToJob(${j.id})">✍️ Apply with AI Proposal</button>
+      <button class="btn btn-secondary btn-sm" onclick="toast('🔖 Job saved to your list!','blue')">Save</button>
+    </div>
+    <div style="margin-top:10px;text-align:center;font-size:11px;color:var(--text3)">💡 Match based on your skills, portfolio & past projects</div>
+  `;
+}
+
+function applyToJob(id) {
+  const j = JOBS.find(x => x.id === id);
+  goTo('proposals');
+  document.getElementById('p-client').value = j.company;
+  toast(`✍️ Proposal form pre-filled for ${j.company}`, 'orange');
+}
+
+/* ═════════════════ PROPOSALS ═════════════════ */
+function selTone(el) {
+  el.closest('#tone-btns').querySelectorAll('.tag').forEach(t => { t.className = 'tag t-gray'; t.style.cssText = 'cursor:pointer;font-size:12px;padding:5px 11px'; });
+  el.className = 'tag t-orange'; el.style.cssText = 'cursor:pointer;font-size:12px;padding:5px 11px';
+}
+
+const PROPOSAL_TEMPLATES = [
+  (t,c,b,tl,n) => `Dear Hiring Team at ${c||'[Company]'},
+
+I'm writing to express my interest in your ${t} project — it's an excellent match with my background and I'd love the opportunity to contribute.
+
+I'm Riya Sharma, a Mumbai-based freelance graphic designer with 3+ years of experience delivering exceptional ${t} work for startups and scaling brands. My approach is collaborative, structured, and always deadline-driven.
+
+WHY I'M THE RIGHT FIT:
+• 3+ years specialising in ${t}
+• 40+ completed projects with a 4.9/5 average client rating
+• Proactive updates — you'll never have to chase me
+• Full source-file delivery with every project${n ? '\n• '+n : ''}
+
+MY PROCESS FOR YOUR PROJECT:
+1. 30-min discovery call to understand your brand and goals
+2. Present 2–3 creative directions with rationale
+3. Refine your chosen direction (2 revision rounds included)
+4. Final delivery: all assets, source files, and a usage guide
+
+Investment: ${b}
+Timeline: ${tl}
+
+I'd love a quick call to learn more about the project. When works best for you?
+
+Warm regards,
+Riya Sharma
+riya@freelancehub.io  |  +91 98765 43210`,
+
+  (t,c,b,tl,n) => `Hi ${c||'there'} 👋
+
+I came across your ${t} project and I'm genuinely excited — it's exactly the kind of work I do best.
+
+I'm Riya, a graphic designer who's spent 3 years helping brands tell their story visually. I've completed 40+ projects just like this, and my clients consistently say the process feels easy and the results exceed what they imagined.
+
+Here's what working with me looks like:
+✅ High-quality creative work, delivered on time
+✅ Proactive communication — no wondering what's happening
+✅ 2 revisions included — your satisfaction is the goal  
+✅ All source files, always${n ? '\n✅ '+n : ''}
+
+Budget: ${b}  ·  Timeline: ${tl}
+
+Take a look at my portfolio: freelancehub.io/riya
+
+Fancy a quick 15-minute chat? I'm very flexible.
+
+Cheers,
+Riya Sharma`
+];
+
+function generateProposal() {
+  const t = document.getElementById('p-type').value;
+  const c = document.getElementById('p-client').value;
+  const b = document.getElementById('p-budget').value;
+  const tl = document.getElementById('p-timeline').value;
+  const n = document.getElementById('p-notes').value;
+
+  const out = document.getElementById('proposal-output');
+  const st = document.getElementById('p-status');
+
+  st.innerHTML = '<span class="spinner" style="margin-left:6px"></span>';
+  out.innerHTML = `<div style="text-align:center;padding:24px;color:var(--text3);font-size:13px;font-style:italic">✨ AI is crafting your personalised proposal…</div>`;
+  document.getElementById('p-action-row').style.display = 'none';
+
+  setTimeout(() => {
+    const template = PROPOSAL_TEMPLATES[Math.floor(Math.random() * PROPOSAL_TEMPLATES.length)];
+    const text = template(t, c, b, tl, n);
+    st.innerHTML = '<span class="tag t-green" style="margin-left:6px">✓ Ready</span>';
+    out.innerHTML = `<pre style="white-space:pre-wrap;font-family:var(--fh);font-size:13px;line-height:1.9;color:var(--text2)">${text}</pre>`;
+    document.getElementById('p-action-row').style.display = 'flex';
+    toast('✅ Proposal ready — copy or send directly!', 'green');
+  }, 1800);
+}
+
+function copyProposal() {
+  const pre = document.querySelector('#proposal-output pre');
+  if (pre) { navigator.clipboard.writeText(pre.textContent); toast('📋 Copied to clipboard!', 'green'); }
+}
+
+/* ═════════════════ PRICING ═════════════════ */
+function calcPrice() {
+  const lv = document.getElementById('skill-level').value;
+  const tp = document.getElementById('proj-type').value;
+  const cx = parseInt(document.getElementById('complexity').value);
+  const hr = parseInt(document.getElementById('hours').value);
+
+  document.getElementById('hours-label').textContent = hr + ' hrs';
+  document.getElementById('complexity-label').textContent = COMPLEXITY_LABELS[cx];
+
+  const base = PRICE_BASE[tp][lv];
+  const mul = 0.65 + (cx * 0.14);
+  const suggested = Math.round((base * mul) / 1000) * 1000;
+  const low = Math.round(suggested * 0.72 / 1000) * 1000;
+  const high = Math.round(suggested * 1.38 / 1000) * 1000;
+  const hourly = Math.round(suggested / hr / 100) * 100;
+
+  document.getElementById('price-main').textContent = '₹' + suggested.toLocaleString('en-IN');
+  document.getElementById('price-low').textContent = '₹' + low.toLocaleString('en-IN');
+  document.getElementById('price-high').textContent = '₹' + high.toLocaleString('en-IN');
+  document.getElementById('price-hourly').textContent = '₹' + hourly.toLocaleString('en-IN') + '/hr';
+
+  document.getElementById('pricing-tip').innerHTML = `
+    <div style="background:var(--accent-bg);border-radius:9px;padding:13px 14px;border-left:3px solid var(--accent)">
+      <div style="font-size:10px;font-weight:800;color:var(--accent);text-transform:uppercase;letter-spacing:.8px;margin-bottom:3px">💡 Tip for ${lv.toUpperCase()} Level</div>
+      <div style="font-size:13px;color:var(--text2);line-height:1.7">${PRICING_TIPS[lv]}</div>
+    </div>`;
+
+  document.getElementById('benchmark-table').innerHTML = BENCHMARKS.map(b => `
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border);font-size:13px">
+      <span style="color:var(--text2);font-weight:600">${b.type}</span>
+      <div style="display:flex;gap:5px">
+        <span class="tag t-green">${b.low}</span>
+        <span class="tag t-amber">${b.mid}</span>
+        <span class="tag t-orange">${b.high}</span>
+      </div>
+    </div>
+  `).join('') + '<div style="display:flex;gap:5px;margin-top:8px"><span class="tag t-green text-xs">Low</span><span class="tag t-amber text-xs">Mid</span><span class="tag t-orange text-xs">High</span></div>';
+}
+
+/* ═════════════════ PROJECTS ═════════════════ */
+let allProjects = [...PROJECTS_DATA];
+function renderProjects() {
+  document.getElementById('project-cards').innerHTML = allProjects.map(p => `
+    <div class="card mb-12">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px">
+        <div>
+          <div style="font-size:15px;font-weight:800;color:var(--text);letter-spacing:-.2px">${p.name}</div>
+          <div class="text-xs text-muted mt-8">${p.client} · Due ${p.due}</div>
+        </div>
+        <div style="display:flex;gap:6px;align-items:center">
+          <span class="tag ${p.pay==='Pending'?'t-amber':p.pay==='Partial'?'t-blue':p.pay==='Not Started'?'t-gray':'t-green'}">${p.pay}</span>
+          <span style="font-size:17px;font-weight:800;color:var(--text2)">${p.pct}%</span>
+        </div>
+      </div>
+      <div class="prog-track mb-12"><div class="prog-bar ${p.color}" style="width:${p.pct}%"></div></div>
+      <div style="margin-bottom:12px">
+        <div class="text-xs text-muted" style="text-transform:uppercase;letter-spacing:.6px;font-weight:700;margin-bottom:7px">Milestones</div>
+        <div style="display:flex;gap:5px;flex-wrap:wrap">
+          ${p.miles.map(m => `<span class="tag ${m.includes('✓')?'t-green':'t-gray'}">${m}</span>`).join('')}
+        </div>
+      </div>
+      <div style="display:flex;gap:7px">
+        <button class="btn btn-secondary btn-sm" onclick="toast('🔔 Deadline reminder set!','green')">🔔 Set Reminder</button>
+        <button class="btn btn-secondary btn-sm" onclick="toast('✅ Milestone marked complete!','green')">✓ Milestone Done</button>
+        <button class="btn btn-blue btn-sm" style="margin-left:auto" onclick="toast('🧾 Invoice generated!','blue')">🧾 Invoice</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function createProject() {
+  const name = document.getElementById('np-name').value || 'New Project';
+  const client = document.getElementById('np-client').value || 'Client';
+  const due = document.getElementById('np-due').value || 'TBD';
+  allProjects.unshift({ name, client, pct:0, color:'prog-blue', due, pay:'Not Started', miles:['Planning','In Progress','Review','Done'] });
+  renderProjects();
+  document.getElementById('proj-modal').classList.remove('open');
+  toast(`📁 "${name}" added to your projects!`, 'green');
+}
+
+/* ═════════════════ INVOICES ═════════════════ */
+let allInvoices = [...INVOICES_DATA];
+function renderInvoices() {
+  document.getElementById('invoice-tbody').innerHTML = allInvoices.map(inv => `
+    <tr>
+      <td style="font-weight:700;color:var(--blue)">${inv.id}</td>
+      <td style="font-weight:600;color:var(--text)">${inv.client}</td>
+      <td style="font-weight:700;color:var(--text)">₹${inv.amt.toLocaleString('en-IN')}</td>
+      <td><span class="tag ${inv.status==='Paid'?'t-green':inv.status==='Pending'?'t-amber':'t-red'}">${inv.status}</span></td>
+      <td><button class="btn btn-secondary btn-xs" onclick="toast('📧 Reminder sent to ${inv.client}!','green')">Remind</button></td>
+    </tr>
+  `).join('');
+
+  document.getElementById('admin-tools').innerHTML = [
+    {icon:'📧',title:'Auto Follow-up Emails',desc:'Send after 3 days of no client reply',active:false},
+    {icon:'🔔',title:'Payment Reminders',desc:'Remind clients 2 days before due date',active:false},
+    {icon:'📄',title:'Auto-Generate Invoice',desc:'Triggered when a milestone is marked done',active:true},
+    {icon:'📅',title:'Deadline Alerts',desc:'Personal reminder 2 days before project deadline',active:false},
+  ].map((tool,i) => `
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 13px;background:${tool.active?'var(--green-bg)':'var(--bg2)'};border:1px solid ${tool.active?'rgba(25,122,85,.2)':'var(--border)'};border-radius:9px">
+      <div style="flex:1;min-width:0">
+        <div style="font-size:13px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:6px">${tool.icon} ${tool.title} ${tool.active?'<span class="tag t-green" style="font-size:9px">Active</span>':''}</div>
+        <div class="text-xs text-muted">${tool.desc}</div>
+      </div>
+      <button class="btn ${tool.active?'btn-secondary':'btn-green'} btn-xs" onclick="toast('${tool.active?'⏸ Paused':'✅ Enabled'}: ${tool.title}','${tool.active?'blue':'green'}')">${tool.active?'Pause':'Enable'}</button>
+    </div>
+  `).join('');
+}
+
+function openInvoiceModal() { document.getElementById('invoice-modal').classList.add('open'); }
+function closeInvoiceModal() { document.getElementById('invoice-modal').classList.remove('open'); }
+
+function createInvoice() {
+  const client = document.getElementById('inv-client').value || 'Client';
+  const proj = document.getElementById('inv-proj').value || 'Project';
+  const amt = parseInt(document.getElementById('inv-amt').value) || 0;
+  const date = document.getElementById('inv-due').value || '—';
+  const newId = 'INV-00'+(allInvoices.length+1);
+  allInvoices.unshift({id:newId,client,proj,amt,date,status:'Pending'});
+  renderInvoices();
+  closeInvoiceModal();
+  toast(`🧾 ${newId} created and ready to send!`, 'green');
+}
+
+/* ═════════════════ CLIENTS ═════════════════ */
+function renderClients() {
+  document.getElementById('freelancer-list').innerHTML = FREELANCERS_DATA.map(f => `
+    <div class="fl-row">
+      <div class="ava" style="width:44px;height:44px;font-size:14px;flex-shrink:0">${f.name.split(' ').map(w=>w[0]).join('')}</div>
+      <div style="flex:1">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:3px">
+          <div style="font-size:14px;font-weight:800;color:var(--text)">${f.name}</div>
+          <span class="tag ${f.avail==='Available'?'t-green':'t-amber'}">${f.avail}</span>
+        </div>
+        <div class="text-xs text-muted" style="margin-bottom:7px">${f.role} · ${f.exp} · <span class="stars-disp" style="font-size:12px">★</span> ${f.rating}</div>
+        <div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:9px">${f.skills.map(s=>`<span class="tag t-blue">${s}</span>`).join('')}</div>
+        <div style="display:flex;gap:7px">
+          <button class="btn btn-primary btn-xs" onclick="toast('📨 Invite sent to ${f.name}!','green')">📨 Send Invite</button>
+          <button class="btn btn-secondary btn-xs">View Full Profile</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+/* ═════════════════ REVIEWS ═════════════════ */
+function renderReviews() {
+  document.getElementById('review-list').innerHTML = REVIEWS_DATA.map(r => `
+    <div style="background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:15px;margin-bottom:10px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+        <div>
+          <div style="font-size:13.5px;font-weight:800;color:var(--text)">${r.client}</div>
+          <div class="text-xs text-muted">${r.proj} · ${r.date}</div>
+        </div>
+        <div class="stars-disp" style="font-size:14px">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)} <span class="text-xs" style="color:var(--text2);font-weight:700">${r.rating}.0</span></div>
+      </div>
+      <div style="font-size:13px;color:var(--text2);line-height:1.75;margin-bottom:9px">"${r.text}"</div>
+      <div style="display:flex;gap:4px;flex-wrap:wrap">${r.tags.map(t=>`<span class="tag t-green">${t}</span>`).join('')}</div>
+    </div>
+  `).join('');
+}
+
+let currentStar = 0;
+function setStar(n) {
+  currentStar = n;
+  document.querySelectorAll('.star-input-btn').forEach((s,i) => {
+    s.style.color = i < n ? '#F59E0B' : '#D1CFC9';
+  });
+}
+
+function toggleTag(el) {
+  const isGray = el.classList.contains('t-gray');
+  el.className = `tag ${isGray?'t-green':'t-gray'}`;
+  el.style.cssText = 'cursor:pointer;padding:4px 10px';
+}
+
+/* ═════════════════ SKILLS ═════════════════ */
+function renderSkills() {
+  document.getElementById('skill-bars').innerHTML = SKILLS_DATA.map(s => `
+    <div style="margin-bottom:14px">
+      <div class="flex items-center justify-between mb-8">
+        <span style="font-size:13.5px;font-weight:600;color:var(--text)">${s.name}</span>
+        <span class="text-xs" style="font-weight:700;color:var(--text3)">${s.pct}%</span>
+      </div>
+      <div class="prog-track"><div class="prog-bar ${s.col}" style="width:${s.pct}%"></div></div>
+    </div>
+  `).join('');
+
+  document.getElementById('resource-grid').innerHTML = [
+    {i:'🎬',title:'Advanced Typography for Designers',src:'YouTube · FreeCodeDesign',tag:'Free',tc:'t-green'},
+    {i:'📖',title:'Value-Based Pricing Masterclass',src:'Udemy · 4.8★',tag:'₹499',tc:'t-amber'},
+    {i:'🎧',title:'Freelance Business Podcast',src:'Spotify · Weekly',tag:'Free',tc:'t-green'},
+    {i:'📝',title:'Client Contract Templates Pack',src:'FreelanceHub Resources',tag:'Free',tc:'t-blue'},
+    {i:'🎨',title:'Figma Advanced Components',src:'Figma Community · Official',tag:'Free',tc:'t-green'},
+    {i:'💼',title:'Client Onboarding Playbook',src:'FreelanceHub · Premium',tag:'₹199',tc:'t-amber'},
+  ].map(r => `
+    <div class="card" style="display:flex;gap:11px;align-items:center">
+      <div style="font-size:24px;flex-shrink:0">${r.i}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:2px">${r.title}</div>
+        <div class="text-xs text-muted">${r.src}</div>
+      </div>
+      <span class="tag ${r.tc}">${r.tag}</span>
+    </div>
+  `).join('');
+}
+
+/* ═════════════════ COMMUNITY ═════════════════ */
+let posts = [...POSTS_DATA];
+function renderCommunity() {
+  document.getElementById('community-feed').innerHTML = posts.map((p,idx) => `
+    <div class="post-card">
+      <div style="display:flex;align-items:center;gap:9px;margin-bottom:8px">
+        <div class="post-ava" style="background:${p.color}">${p.ini}</div>
+        <div>
+          <div style="font-size:13px;font-weight:700;color:var(--text)">${p.name}</div>
+          <div class="text-xs text-muted">${p.role} · ${p.t}</div>
+        </div>
+      </div>
+      <div style="font-size:13px;color:var(--text2);line-height:1.75;margin-bottom:9px">${p.text}</div>
+      <div style="display:flex;gap:4px">
+        <button onclick="likePost(${idx},this)" style="background:none;border:none;color:var(--text3);font-size:12px;cursor:pointer;padding:4px 8px;border-radius:5px;font-family:var(--fh);font-weight:600;display:inline-flex;align-items:center;gap:3px;transition:all .15s" onmouseover="this.style.background='var(--bg2)'" onmouseout="this.style.background='none'">❤️ ${p.likes}</button>
+        <button style="background:none;border:none;color:var(--text3);font-size:12px;cursor:pointer;padding:4px 8px;border-radius:5px;font-family:var(--fh);font-weight:600" onclick="toast('💬 Reply feature coming soon!','blue')">💬 Reply</button>
+        <button style="background:none;border:none;color:var(--text3);font-size:12px;cursor:pointer;padding:4px 8px;border-radius:5px;font-family:var(--fh);font-weight:600">🔗 Share</button>
+      </div>
+    </div>
+  `).join('');
+
+  document.getElementById('collab-list').innerHTML = COLLABS_DATA.map(c => `
+    <div style="background:#fff;border:1px solid var(--border);border-radius:var(--r2);padding:14px;margin-bottom:8px">
+      <div style="font-size:13.5px;font-weight:800;color:var(--text);margin-bottom:3px">${c.title}</div>
+      <div class="text-xs text-muted mb-8">By ${c.by} · ${c.pay}</div>
+      <div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:10px">${c.tags.map(t=>`<span class="tag t-blue">${t}</span>`).join('')}</div>
+      <button class="btn btn-primary btn-xs" onclick="toast('🤝 Collaboration request sent!','green')">Apply to Collaborate</button>
+    </div>
+  `).join('');
+}
+
+function likePost(idx, btn) {
+  posts[idx].likes++;
+  btn.textContent = '❤️ ' + posts[idx].likes;
+  btn.style.color = 'var(--red)';
+}
+
+function addPost() {
+  const val = document.getElementById('post-input').value.trim();
+  if (!val) return;
+  posts.unshift({name:'Riya Sharma',role:'Graphic Designer',color:'#E05C2A',ini:'RS',text:val,likes:0,t:'Just now'});
+  renderCommunity();
+  document.getElementById('post-input').value = '';
+  toast('✅ Posted to the community!','green');
+}
+
+/* ═════════════════ INIT ═════════════════ */
+document.addEventListener('DOMContentLoaded', () => {
+  renderDashboard();
+  renderJobs();
+  renderInvoices();
+  renderProjects();
+  renderClients();
+  renderReviews();
+  renderSkills();
+  renderCommunity();
+  calcPrice();
+
+  // Hamburger visibility
+  const hbg = document.getElementById('hamburger');
+  const checkHbg = () => { hbg.style.display = window.innerWidth < 940 ? 'flex' : 'none'; };
+  checkHbg();
+  window.addEventListener('resize', checkHbg);
+
+  // Modal backdrop close
+  ['invoice-modal','proj-modal'].forEach(id => {
+    document.getElementById(id).addEventListener('click', e => {
+      if (e.target === e.currentTarget) e.target.classList.remove('open');
+    });
+  });
+});
+</script>
+</body>
+</html>
